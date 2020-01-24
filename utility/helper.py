@@ -35,3 +35,25 @@ def authenticate_an_account_helper(bank):
 	u_pass = input_prompt()
 
 	return bank.process_user_authentication(u_email, u_pass)
+
+
+def withdrawal_helper(bank):
+	print("Fill in details appropriately to process withdrawal")
+	print("Amount to withdraw :")
+	withdraw_amt = input_prompt()
+	print("Enter password to proceed")
+	withdraw_pass = input_prompt()
+
+	return bank.process_user_withdraw(withdraw_amt, withdraw_pass)
+
+
+def tranfer_amount_helper(bank):
+	print("Fill details appropriately to process transfer")
+	print("Enter beneficiary's email: ")
+	to_account_email = input_prompt()
+	print("Enter amount: ")
+	trans_amount = input_prompt()
+	print("Enter password to proceed: ")
+	from_account_pass = input_prompt()
+
+	return bank.process_user_transfer(to_account_email, trans_amount, from_account_pass)

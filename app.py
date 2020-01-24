@@ -2,16 +2,13 @@
 This file serves as the entry point for application
 """
 from bank.bank import Bank
-from utility.utils import (
-    validate_user_input_to_int,
-    user_response_controller, 
-    reason_for_resend, 
-    input_prompt
-)
+from utility.utils import user_response_controller, reason_for_resend, input_prompt
 
 from utility.helper import (
     create_bank_account_helper,
     authenticate_an_account_helper,
+    withdrawal_helper,
+    tranfer_amount_helper
 )
 
 
@@ -117,24 +114,14 @@ def main():
                                     #       a valid detail or cancel operation
                                     # -----
                                     while process_withdrawal_flag:
-                                        print("Fill in details appropriately to process withdrawal")
-                                        print("Amount to withdraw :")
-                                        withdraw_amt = validate_user_input_to_int(input_prompt())
-                                        print("Enter password to proceed")
-                                        withdraw_pass = input_prompt()
-
-
-                                        if withdraw_amt == 'error':
-                                            reason_for_resend('Invalid amount specified')
                                         
-                                        else:
-                                            withdrawal_response = bank.process_user_withdraw(withdraw_amt, withdraw_pass)
-                                            if withdrawal_response[0]:
-                                                print(withdrawal_response[1])
-                                                process_withdrawal_flag = False
+                                        withdrawal_response = withdrawal_helper(bank)
+                                        if withdrawal_response[0]:
+                                            print(withdrawal_response[1])
+                                            process_withdrawal_flag = False
 
-                                            else:
-                                                reason_for_resend(withdrawal_response[1])
+                                        else:
+                                            reason_for_resend(withdrawal_response[1])
 
                                 # process transfer
                                 elif response == 3:
@@ -147,28 +134,17 @@ def main():
                                     
                                     process_transfer_flag = True
                                     while process_transfer_flag:
-                                        
-                                        print("Fill details appropriately to process transfer")
-                                        print("Enter beneficiary's email: ")
-                                        to_account_email = input_prompt()
-                                        print("Enter amount: ")
-                                        trans_amount = validate_user_input_to_int(input_prompt())
-                                        print("Enter password to proceed: ")
-                                        from_account_pass = input_prompt()
 
-                                        if trans_amount == "error":
-                                            reason_for_resend('Invalid amount specified')
+                                        transfer_response = tranfer_amount_helper(bank)
+
+                                        # if transfer is successful
+                                        if transfer_response[0]:
+                                            print(transfer_response[1])
+                                            process_transfer_flag = False
+
+                                        # if transfer is unsuccessful
                                         else:
-                                            transfer_response = bank.process_user_transfer(to_account_email, trans_amount, from_account_pass)
-
-                                            # if transfer is successful
-                                            if transfer_response[0]:
-                                                print(transfer_response[1])
-                                                process_transfer_flag = False
-
-                                            # if transfer is unsuccessful
-                                            else:
-                                                reason_for_resend(transfer_response[1])
+                                            reason_for_resend(transfer_response[1])
 
 
                                 
