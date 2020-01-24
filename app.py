@@ -2,53 +2,12 @@
 This file serves as the entry point for application
 """
 from bank.bank import Bank
-
-
-
-
-
-
-def input_prompt():
-    """
-    renders display for receiving user input
-    """
-    return input(">>> ")
-
-
-def _user_response_controller(bank_request, user_response):
-    """
-    processes user's response for bank's request sent
-    : bank_request --> what is user currently requesting for 
-    : user_response --> what a user wants to actually do amongst the options in the
-              above bank_requests
-    """
-    user_response = _validate_user_input_to_int(user_response)
-
-    if user_response == "error":
-        return ['resend_same_bank_request', 'No valid option choosen']
-
-    if user_response >= 1 and user_response <= bank_request.get('available_options'):
-        return user_response
-    else:
-        return ['resend_same_bank_request', 'Selected option not found']
-
-
-def _validate_user_input_to_int(user_input):
-    """
-    validates user input against type integer & automatically converts and returns the value
-    : user_input --> value entered by user
-    """
-    try:
-        return int(user_input)
-    except Exception:
-        return "error"
-
-        
-def reason_for_resend(why):
-    print("ERROR ERROR".center(60, " "))
-    print(why.center(61, " "))
-    print(
-        "Do ensure, you're inserting the right options as needed\n\n".center(30, " "))
+from utility.utils import (
+    validate_user_input_to_int,
+    user_response_controller, 
+    reason_for_resend, 
+    input_prompt
+)
 
 
 
@@ -66,7 +25,7 @@ def main():
         print(f"welcome to {bank.BANK_NAME}\n".center(50, " "))
         print(bank.how_can_we_help())
     
-        response = _user_response_controller(
+        response = user_response_controller(
                         bank.BANK_REQUESTS.get('hcwh'), 
                         input_prompt())
         
@@ -97,7 +56,7 @@ def main():
                     print("Amount to deposit: ")
                     a_amount = input_prompt()
                     
-                    validity_response = _validate_user_input_to_int(a_amount)
+                    validity_response = validate_user_input_to_int(a_amount)
 
                     # check the validity of the value entered as amount
                     if validity_response == "error":
@@ -153,7 +112,7 @@ def main():
                             #   process reponse of user for transaction computations
                             # ------
                             print(bank.get_core_transactions())
-                            response = _user_response_controller(
+                            response = user_response_controller(
                                 bank.BANK_REQUESTS.get('trans'),
                                 input_prompt())
 
@@ -181,7 +140,7 @@ def main():
                                     while process_withdrawal_flag:
                                         print("Fill in details appropriately to process withdrawal")
                                         print("Amount to withdraw :")
-                                        withdraw_amt = _validate_user_input_to_int(input_prompt())
+                                        withdraw_amt = validate_user_input_to_int(input_prompt())
                                         print("Enter password to proceed")
                                         withdraw_pass = input_prompt()
 
@@ -214,7 +173,7 @@ def main():
                                         print("Enter beneficiary's email: ")
                                         to_account_email = input_prompt()
                                         print("Enter amount: ")
-                                        trans_amount = _validate_user_input_to_int(input_prompt())
+                                        trans_amount = validate_user_input_to_int(input_prompt())
                                         print("Enter password to proceed: ")
                                         from_account_pass = input_prompt()
 

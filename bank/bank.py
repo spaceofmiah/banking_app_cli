@@ -2,7 +2,7 @@
 This file contains bank processes
 """
 
-from utility.utils import validate_email
+from utility.utils import validate_email, validate_user_input_to_int
 
 
 class Account:
@@ -132,10 +132,15 @@ class Bank:
         : amount --> the amount to be withdrawn from the account
         : password --> the password of the account on which withdrawal is to be made
         """
+        validated_amount = validate_user_input_to_int(amount)
+
+        if validated_amount == 'error':
+            return [False, 'invalid amount']
+
         if self.authenticated_account.account_password == password:
-            if self.authenticated_account.account_balance > amount:
-                self.authenticated_account.account_balance -= amount
-                return [True, f'successfully withdrawn N{amount}.']
+            if self.authenticated_account.account_balance > validated_amount:
+                self.authenticated_account.account_balance -= validated_amount
+                return [True, f'successfully withdrawn N{validated_amount}.']
             else:
                 return [False, 'insufficient funds']
         return [False, 'invalid password']
@@ -160,14 +165,18 @@ class Bank:
         : from_account_password --> password of the account making the transfer
         """
         to_account = self.ACCOUNTS.get(to_account_email, False)
+        validated_amount = validate_user_input_to_int(amount)
+
+        if validated_amount == 'error':
+            return [False, 'invalid amount']
 
         if to_account == False:
             return [False, "beneficiary's account not found"]
         else:
             if self.authenticated_account.account_password == from_account_password:
-                if self.authenticated_account.account_balance > amount:
-                    self.authenticated_account.account_balance -= amount
-                    to_account.account_balance += amount
+                if self.authenticated_account.account_balance > validated_amount:
+                    self.authenticated_account.account_balance -= validated_amount
+                    to_account.account_balance += validated_amount
                     return [True, 'transfer successful']
                 else:
                     return [False, 'insufficient funds']
