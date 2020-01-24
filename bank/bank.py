@@ -133,8 +133,11 @@ class Bank:
         : password --> the password of the account on which withdrawal is to be made
         """
         if self.authenticated_account.account_password == password:
-            self.authenticated_account.account_balance -= amount
-            return [True, f'successfully withdrawn N{amount}.']
+            if self.authenticated_account.account_balance > amount:
+                self.authenticated_account.account_balance -= amount
+                return [True, f'successfully withdrawn N{amount}.']
+            else:
+                return [False, 'insufficient funds']
         return [False, 'invalid password']
 
     def process_account_creation(self, name, email, password, balance=0):
