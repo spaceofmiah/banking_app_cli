@@ -82,8 +82,9 @@ def main():
                 #       this process should continue until user stops it by his reponse
                 #       or successfully create a bank account
                 # -----
-
-                while True:
+                
+                account_creation_flag = True
+                while account_creation_flag:
                     print("Do fill in your correct details for account creation\n")
                     
                     
@@ -109,14 +110,76 @@ def main():
                         # if account creation is successful
                         if creation_response[0]:
                             print(creation_response[1])
-                            break
+                            account_creation_flag = False
 
                         # on an errorneous account creation
                         else:
                             reason_for_resend(creation_response[1])
                 
+            elif response == 2:
+                
+                authentication_flag = True
+                while authentication_flag:
+
+                    # ----
+                    #   FIRST AUTHENTICATE THE ACCOUNT
+                    #       Before a user can perform any transaction, they first need to be
+                    #       authenticated
+                    # ----
+
+                    print("Please insert your correct login credentials")
+                    print("Email:")
+                    u_email = input_prompt()
+                    print("Password: ")
+                    u_pass = input_prompt()
+
+                    auth_response = bank.process_user_authentication(u_email, u_pass)
 
 
+                    # when auth credentials fails to authenticate, display why and  
+                    # re-initiate the login process
+
+                    if auth_response[0] == False:
+                        reason_for_resend(auth_response[1])
+
+                    # when auth credentials passes authentication, then display available
+                    # transactions that can be processed by the authenticated user
+                    else:
+
+                        transaction_flag = True
+                        while transaction_flag:
+                            # ------
+                            # PROCESS USER TRANSACTIONS
+                            #   process reponse of user for transaction computations
+                            # ------
+                            print(bank.get_core_transactions())
+                            response = _user_response_controller(
+                                bank.BANK_REQUESTS.get('trans'),
+                                input_prompt())
+
+
+                            if isinstance(response, list):
+                                if response[0] == "resend_same_bank_request":
+                                    reason_for_resend(response[1])
+
+                            else:
+
+                                if response == 1:
+                                    print("We'll definitely show you your balance")
+                                    break
+
+                                elif response == 2:
+                                    print("We'll definitely process your transaction")
+                                    break
+
+                                elif response == 3:
+                                    print("We'll definitely process your transaction")
+                                    break
+                            break 
+
+                    break
+
+                        
 
 
 

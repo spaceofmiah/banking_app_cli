@@ -158,8 +158,18 @@ class Bank:
     def process_user_authentication(self, email, password):
         """
         enable a user to be able to view transactions
-        : email
+        : email --> email of the account to be signed on
+        : password --> password of an account
         """
-        pass
+        if validate_email(email):
+            account = self.ACCOUNTS.get(email, None)
+            if account:
+                if account.account_password == password:
+                    return [True, 'successfully authenticated', account]
+                else:
+                    return [False, 'invalid password']
+            else:
+                return [False, 'no account found with provided credentials']
+        return [False, 'password not in a valid format']
 
 
