@@ -157,20 +157,53 @@ def main():
                                 bank.BANK_REQUESTS.get('trans'),
                                 input_prompt())
 
-
+                            # if a user doesn't choose the correct outlisted option
                             if isinstance(response, list):
                                 if response[0] == "resend_same_bank_request":
                                     reason_for_resend(response[1])
 
+                            # if a user chooses correct outlisted option
                             else:
 
+                                # check balance
                                 if response == 1:
                                     print(f"Your current balance is: {bank.get_user_account_balance()}")
 
+                                # process withdrawal
                                 elif response == 2:
-                                    print("We'll definitely process your transaction")
-                                    break
+                                    process_withdrawal_flag = True
 
+                                    # -----
+                                    #   PROCESS WITHDRAWAL
+                                    #       this process will continue until user inputs
+                                    #       a valid detail or cancel operation
+                                    # -----
+                                    while process_withdrawal_flag:
+                                        print("Fill in details appropriately to process withdrawal")
+                                        print("Amount to withdraw :")
+                                        withdraw_amt = _validate_user_input_to_int(input_prompt())
+                                        print("Enter password to proceed")
+                                        withdraw_pass = input_prompt()
+
+
+                                        if withdraw_amt == 'error':
+                                            reason_for_resend('Invalid amount specified')
+                                        
+                                        else:
+                                            withdrawal_response = bank.process_user_withdraw(withdraw_amt, withdraw_pass)
+                                            if withdrawal_response[0]:
+                                                print(withdrawal_response[1])
+                                                process_withdrawal_flag = False
+
+                                            else:
+                                                reason_for_resend(withdrawal_response[1])
+
+
+
+
+
+
+                                # process transfer
                                 elif response == 3:
                                     print("We'll definitely process your transaction")
                                     break
