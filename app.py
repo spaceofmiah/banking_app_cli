@@ -9,6 +9,8 @@ from utility.utils import (
     input_prompt
 )
 
+from utility.helper import create_bank_account_helper
+
 
 
 def main():
@@ -44,34 +46,13 @@ def main():
                 
                 account_creation_flag = True
                 while account_creation_flag:
-                    print("Do fill in your correct details for account creation\n")
-                    
-                    
-                    print("Email: ")
-                    u_email = input_prompt()
-                    print("Name: ")
-                    u_name = input_prompt()
-                    print("Password: ")
-                    u_pass = input_prompt()
-                    print("Amount to deposit: ")
-                    a_amount = input_prompt()
-                    
-                    validity_response = validate_user_input_to_int(a_amount)
+                    creation_response = create_bank_account_helper(bank)
 
-                    # check the validity of the value entered as amount
-                    if validity_response == "error":
-                        reason_for_resend("Invalid Amount -- Amount should be a number")
-
-                    else:
-                        creation_response = bank.process_account_creation(
-                            u_name, u_email, u_pass, validity_response)
-                        
+                    if isinstance(creation_response, list):
                         # if account creation is successful
                         if creation_response[0]:
                             print(creation_response[1])
                             account_creation_flag = False
-
-                        # on an errorneous account creation
                         else:
                             reason_for_resend(creation_response[1])
                 
