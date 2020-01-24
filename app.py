@@ -48,7 +48,7 @@ def reason_for_resend(why):
     print("ERROR ERROR".center(60, " "))
     print(why.center(61, " "))
     print(
-        "Do ensure, you're selecting the right options using outlined number\n\n".center(30, " "))
+        "Do ensure, you're inserting the right options as needed\n\n".center(30, " "))
 
 
 
@@ -74,8 +74,50 @@ def main():
                 reason_for_resend(response[1])
 
         else:
-            print(response)
-            break;
+            if response == 1:
+
+                # -----
+                #    CREATE BANK ACCOUNT
+                #       this process should continue until user stops it by his reponse
+                #       or successfully create a bank account
+                # -----
+
+                while True:
+                    print("Do fill in your correct details for account creation\n")
+                    
+                    
+                    print("Email: ")
+                    u_email = input_prompt()
+                    print("Name: ")
+                    u_name = input_prompt()
+                    print("Password: ")
+                    u_pass = input_prompt()
+                    print("Amount to deposit: ")
+                    a_amount = input_prompt()
+                    
+                    validity_response = _validate_user_input_to_int(a_amount)
+
+                    # check the validity of the value entered as amount
+                    if validity_response == "error":
+                        reason_for_resend("Invalid Amount -- Amount should be a number")
+
+                    else:
+                        creation_response = bank.process_account_creation(
+                            u_name, u_email, u_pass, validity_response)
+                        
+                        # if account creation is successful
+                        if creation_response[0]:
+                            print(creation_response[1])
+                            break
+
+                        # on an errorneous account creation
+                        else:
+                            reason_for_resend(creation_response[1])
+                break
+
+
+
+
 
 
 

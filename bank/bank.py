@@ -2,14 +2,18 @@
 This file contains bank processes
 """
 
+from utility.utils import validate_email
+
 
 class Account:
 
-    def __init__(self, name, email, password, balance=0):
-        self.account_name = name,
-        self.account_email = email,
-        self.account_password = password
-        self.account_balance = balance
+    def __init__(self, name, email, password, balance):
+
+        if validate_email(email):
+            self.account_name = name
+            self.account_email = email
+            self.account_password = password
+            self.account_balance = balance
 
     def set_account_name(self, new_name, password):
         """
@@ -26,7 +30,16 @@ class Account:
         : new_email --> the new email address 
         : password --> the password for the account
         """
-        pass
+        validate_email(new_email)
+        if self.email == old_email:
+            if self.password == password:
+                self.email = new_email
+                return True
+            else:
+                return [False, "password does not match"]
+        else:
+            return [False, "email does not match"]
+        
 
     def set_account_balance(self, amount):
         """
@@ -75,7 +88,7 @@ class Bank:
     def __init__(self):
 
         self.BANK_NAME = "Miah's Bank"
-        self.ACCOUNTS = set()
+        self.ACCOUNTS = dict()
         
         # ** REFACTOR SPOT
         #   This dictionary could also be refactored to hold the questions
@@ -120,6 +133,18 @@ class Bank:
         : password --> the password of the account on which withdrawal is to be made
         """
         pass
+
+    def process_account_creation(self, name, email, password, balance=0):
+        """
+        creates and return a bank account
+        """
+        if self.ACCOUNTS.get(email, False):
+            return [False, 'there is already an account with same email provided']
+        
+        account = Account(name, email, password, balance)
+        self.ACCOUNTS[email] = account
+        return [True, 'account created successfully', account]
+        
 
     def process_user_transfer(self, to_account_email, amount, from_account_password):
         """
