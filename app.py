@@ -58,13 +58,14 @@ def main():
     """
     bank = Bank()
     flag = True
-    # -----
-    #   DISPLAY WELCOME MESSAGE AND HOW BANK MAY HELP USER
-    # -----
-    print(f"welcome to {bank.BANK_NAME}\n".center(50, " "))
-    print(bank.how_can_we_help())
-    
+
     while flag:
+        # -----
+        #   DISPLAY WELCOME MESSAGE AND HOW BANK MAY HELP USER
+        # -----
+        print(f"welcome to {bank.BANK_NAME}\n".center(50, " "))
+        print(bank.how_can_we_help())
+    
         response = _user_response_controller(
                         bank.BANK_REQUESTS.get('hcwh'), 
                         input_prompt())
@@ -113,7 +114,7 @@ def main():
                         # on an errorneous account creation
                         else:
                             reason_for_resend(creation_response[1])
-                break
+                
 
 
 
