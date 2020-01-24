@@ -165,8 +165,7 @@ def main():
                             else:
 
                                 if response == 1:
-                                    print("We'll definitely show you your balance")
-                                    break
+                                    print(f"Your current balance is: {bank.get_user_account_balance()}")
 
                                 elif response == 2:
                                     print("We'll definitely process your transaction")

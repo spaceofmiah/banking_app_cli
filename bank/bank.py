@@ -89,7 +89,8 @@ class Bank:
 
         self.BANK_NAME = "Miah's Bank"
         self.ACCOUNTS = dict()
-        
+        self.authenticated_account = None
+
         # ** REFACTOR SPOT
         #   This dictionary could also be refactored to hold the questions
         #   as a list e.g 
@@ -119,12 +120,11 @@ class Bank:
         transactions = """1. check balance  \n2. withdraw    \n3. transfer  \n"""
         return transactions
 
-    def get_user_account_balance(self, password):
+    def get_user_account_balance(self):
         """
         returns an account balance
-        : password --> the password of the account whose balance is to be seen
         """
-        pass
+        return self.authenticated_account.account_balance
 
     def process_user_withdraw(self, amount, password):
         """
@@ -162,10 +162,10 @@ class Bank:
         : password --> password of an account
         """
         if validate_email(email):
-            account = self.ACCOUNTS.get(email, None)
-            if account:
-                if account.account_password == password:
-                    return [True, 'successfully authenticated', account]
+            self.authenticated_account = self.ACCOUNTS.get(email, None)
+            if self.authenticated_account:
+                if self.authenticated_account.account_password == password:
+                    return [True, 'successfully authenticated']
                 else:
                     return [False, 'invalid password']
             else:
