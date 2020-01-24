@@ -9,7 +9,10 @@ from utility.utils import (
     input_prompt
 )
 
-from utility.helper import create_bank_account_helper
+from utility.helper import (
+    create_bank_account_helper,
+    authenticate_an_account_helper,
+)
 
 
 
@@ -67,14 +70,7 @@ def main():
                     #       authenticated
                     # ----
 
-                    print("Please insert your correct login credentials")
-                    print("Email:")
-                    u_email = input_prompt()
-                    print("Password: ")
-                    u_pass = input_prompt()
-
-                    auth_response = bank.process_user_authentication(u_email, u_pass)
-
+                    auth_response = authenticate_an_account_helper(bank)
 
                     # when auth credentials fails to authenticate, display why and  
                     # re-initiate the login process
@@ -88,10 +84,12 @@ def main():
 
                         transaction_flag = True
                         while transaction_flag:
+                            
                             # ------
                             # PROCESS USER TRANSACTIONS
                             #   process reponse of user for transaction computations
                             # ------
+
                             print(bank.get_core_transactions())
                             response = user_response_controller(
                                 bank.BANK_REQUESTS.get('trans'),

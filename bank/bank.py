@@ -189,15 +189,17 @@ class Bank:
         : email --> email of the account to be signed on
         : password --> password of an account
         """
-        if validate_email(email):
-            self.authenticated_account = self.ACCOUNTS.get(email, None)
-            if self.authenticated_account:
-                if self.authenticated_account.account_password == password:
-                    return [True, 'successfully authenticated']
+        try:
+            if validate_email(email):
+                self.authenticated_account = self.ACCOUNTS.get(email, None)
+                if self.authenticated_account:
+                    if self.authenticated_account.account_password == password:
+                        return [True, 'successfully authenticated']
+                    else:
+                        return [False, 'invalid password']
                 else:
-                    return [False, 'invalid password']
-            else:
-                return [False, 'no account found with provided credentials']
-        return [False, 'password not in a valid format']
+                    return [False, 'no account found with provided credentials']
+        except ValueError as e:
+            return [False, 'invalid email address provided']
 
 
