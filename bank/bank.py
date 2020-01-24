@@ -64,7 +64,7 @@ class Account:
         return an account balance
         : password --> the password of the account
         """
-        return sefl.account_balance
+        return self.account_balance
 
         
 
@@ -75,21 +75,35 @@ class Bank:
     def __init__(self):
 
         self.BANK_NAME = "Miah's Bank"
+        self.ACCOUNTS = set()
+        
+        # ** REFACTOR SPOT
+        #   This dictionary could also be refactored to hold the questions
+        #   as a list e.g 
+        #       'hwch': {
+        #           'options': ['create account', 'transactions']
+        #           'available_options' : len(options)
+        #       }
+        # ** REFACTOR SPOT
+        self.BANK_REQUESTS = { 
+           'hcwh': {
+                "meaning" : "HOW CAN WE HELP",
+                "available_options" : 2,
+           },
+        
+           'trans': {
+                "meaning" : "TRANSACTION",
+                "available_options": 3,
+           },
+        } 
         
 
-    def get_main_actions(self):
-        actions = """               \n
-        1. create account           \n
-        2. transaction              \n
-        """
+    def how_can_we_help(self):
+        actions = """1. create account   \n2. transaction\n"""
         return actions
 
     def get_core_transactions(self):
-        transactions = """
-        1. check balance            \n
-        2. withdraw                 \n
-        3. transfer                 \n
-        """
+        transactions = """1. check balance  \n2. withdraw    \n3. transfer  \n"""
         return transactions
 
     def get_user_account_balance(self, password):
