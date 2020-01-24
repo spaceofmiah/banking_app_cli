@@ -198,16 +198,43 @@ def main():
                                             else:
                                                 reason_for_resend(withdrawal_response[1])
 
-
-
-
-
-
                                 # process transfer
                                 elif response == 3:
-                                    print("We'll definitely process your transaction")
-                                    break
-                            break 
+                                    
+                                    # ------
+                                    #   PROCESS FUND TRANSFER
+                                    #       this process will continue until user inputs
+                                    #       a valid detail or cancel operation
+                                    # ------
+                                    
+                                    process_transfer_flag = True
+                                    while process_transfer_flag:
+                                        
+                                        print("Fill details appropriately to process transfer")
+                                        print("Enter beneficiary's email: ")
+                                        to_account_email = input_prompt()
+                                        print("Enter amount: ")
+                                        trans_amount = _validate_user_input_to_int(input_prompt())
+                                        print("Enter password to proceed: ")
+                                        from_account_pass = input_prompt()
+
+                                        if trans_amount == "error":
+                                            reason_for_resend('Invalid amount specified')
+                                        else:
+                                            transfer_response = bank.process_user_transfer(to_account_email, trans_amount, from_account_pass)
+
+                                            # if transfer is successful
+                                            if transfer_response[0]:
+                                                print(transfer_response[1])
+                                                process_transfer_flag = False
+
+                                            # if transfer is unsuccessful
+                                            else:
+                                                reason_for_resend(transfer_response[1])
+
+
+                                
+                                break 
 
                     break
 

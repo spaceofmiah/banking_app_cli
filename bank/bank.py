@@ -159,7 +159,20 @@ class Bank:
         : amount --> the amount to be transfered
         : from_account_password --> password of the account making the transfer
         """
-        pass
+        to_account = self.ACCOUNTS.get(to_account_email, False)
+
+        if to_account == False:
+            return [False, "beneficiary's account not found"]
+        else:
+            if self.authenticated_account.account_password == from_account_password:
+                if self.authenticated_account.account_balance > amount:
+                    self.authenticated_account.account_balance -= amount
+                    to_account.account_balance += amount
+                    return [True, 'transfer successful']
+                else:
+                    return [False, 'insufficient funds']
+            else:
+                return [False, 'invalid password']
 
     def process_user_authentication(self, email, password):
         """
