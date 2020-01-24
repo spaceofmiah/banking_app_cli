@@ -23,7 +23,14 @@ def _user_response_controller(bank_request, user_response):
               above bank_requests
     """
     user_response = _validate_user_input_to_int(user_response)
-    return [user_response, bank_request.get('available_options')]
+
+    if user_response == "error":
+        return ['resend_same_bank_request', 'No valid option choosen']
+
+    if user_response >= 1 and user_response <= bank_request.get('available_options'):
+        return user_response
+    else:
+        return ['resend_same_bank_request', 'Selected option not found']
 
 
 def _validate_user_input_to_int(user_input):
@@ -37,7 +44,11 @@ def _validate_user_input_to_int(user_input):
         return "error"
 
         
-        
+def reason_for_resend(why):
+    print("ERROR ERROR".center(60, " "))
+    print(why.center(61, " "))
+    print(
+        "Do ensure, you're selecting the right options using outlined number\n\n".center(30, " "))
 
 
 
@@ -58,20 +69,13 @@ def main():
                         bank.BANK_REQUESTS.get('hcwh'), 
                         input_prompt())
         
-        user_input = response[0]
-        request_option_len = response[1]
-
-
-        if user_input >= 1 and user_input <= request_option_len:
-            print("Nice computation")
-            flag = False
-
+        if isinstance(response, list):
+            if response[0] == 'resend_same_bank_request':
+                reason_for_resend(response[1])
 
         else:
-            print("Bad computation")
+            print(response)
             break;
-
-
 
 
 
